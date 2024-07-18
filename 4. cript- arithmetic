@@ -1,0 +1,21 @@
+from itertools import permutations
+
+def is_valid_solution(t, w, o, f, u, r):
+    two = t * 100 + w * 10 + o
+    four = f * 1000 + o * 100 + u * 10 + r
+    return 2 * two == four
+
+def solve_cryptarithmetic():
+    letters = 'twourf'
+    digits = range(10)
+    for perm in permutations(digits, 6):
+        t, w, o, f, u, r = perm
+        if t == 0 or f == 0:
+            continue
+        if is_valid_solution(t, w, o, f, u, r):
+            print(f"TWO + TWO = FOUR")
+            print(f"{t}{w}{o} + {t}{w}{o} = {f}{o}{u}{r}")
+            return
+    print("No solution found.")
+
+solve_cryptarithmetic()
