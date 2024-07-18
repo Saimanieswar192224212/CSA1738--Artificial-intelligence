@@ -1,0 +1,39 @@
+from collections import deque
+def is_valid(state, m, n):
+    return 0 <= state[0] <= m and 0 <= state[1] <= n
+def bfs_water_jug(m, n, d):
+    start = (0, 0)
+    goal = d
+    visited = set()
+    queue = deque([(start, [])])
+    while queue:
+        (current, path) = queue.popleft()
+        (x, y) = current
+        if current in visited:
+            continue
+        visited.add(current)
+        new_path = path + [current]
+        if x == goal or y == goal:
+            return new_path
+        possible_moves = [
+            (m, y),   # Fill jug1
+            (x, n),   # Fill jug2
+            (0, y),   # Empty jug1
+            (x, 0),   # Empty jug2
+            (x - min(x, n - y), y + min(x, n - y)),  # Pour jug1 into jug2
+            (x + min(y, m - x), y - min(y, m - x))   # Pour jug2 into jug1
+        ]
+        for move in possible_moves:
+            if is_valid(move, m, n) and move not in visited:
+                queue.append((move, new_path))
+    return None
+# Example usage:
+m = 4  # Capacity of jug1
+n = 3  # Capacity of jug2
+d = 2  # Desired amount of water
+solution = bfs_water_jug(m, n, d)
+if solution:
+    for step in solution:
+        print(f"Jug1: {step[0]} liters, Jug2: {step[1]} liters")
+else:
+    print("No solution found.")
