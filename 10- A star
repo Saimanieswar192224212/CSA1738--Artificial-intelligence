@@ -1,0 +1,56 @@
+import heapq
+
+def a_star(graph, start, goal, heuristic):
+    # Priority queue to store (cost, node, path)
+    open_set = []
+    heapq.heappush(open_set, (0 + heuristic(start), start, [], 0))  # (f-cost, current node, path, g-cost)
+    
+    # Dictionary to store the cost of the path from start to each node
+    g_cost = {start: 0}
+    
+    while open_set:
+        # Pop the node with the lowest f(n) = g(n) + h(n)
+        current_f, current_node, path, current_g_cost = heapq.heappop(open_set)
+        
+        # If we reached the goal, return the path and total cost
+        if current_node == goal:
+            return path + [goal], current_g_cost
+        
+        # Explore neighbors
+        for neighbor, weight in graph.get(current_node, []):
+            new_g_cost = current_g_cost + weight
+            
+            if neighbor not in g_cost or new_g_cost < g_cost[neighbor]:
+                g_cost[neighbor] = new_g_cost
+                f_cost = new_g_cost + heuristic(neighbor)
+                heapq.heappush(open_set, (f_cost, neighbor, path + [current_node], new_g_cost))
+    
+    return None, float('inf')  # Path not found
+
+# Example heuristic function for a grid-based map (Manhattan distance)
+def heuristic(node):
+    # Example heuristic: For grid-based problems, you might use Manhattan distance
+    # For demonstration purposes, this heuristic always returns 0
+    return 0
+
+# Example usage:
+if __name__ == "__main__":
+    # Define a graph using an adjacency list with weights
+    graph = {
+        'A': [('B', 1), ('C', 4)],
+        'B': [('A', 1), ('C', 2), ('D', 5)],
+        'C': [('A', 4), ('B', 2), ('D', 1)],
+        'D': [('B', 5), ('C', 1)]
+    }
+    
+    start_node = 'A'
+    goal_node = 'D'
+    
+    # Perform A* search
+    path, total_cost = a_star(graph, start_node, goal_node, heuristic)
+    
+    if path:
+        print(f"Path found: {' -> '.join(path)}")
+        print(f"Total cost: {total_cost}")
+    else:
+        print("Path not found")
