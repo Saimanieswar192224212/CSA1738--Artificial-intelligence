@@ -1,0 +1,41 @@
+import itertools
+
+# Function to calculate the total distance of a given path
+def calculate_total_distance(graph, path):
+    total_distance = 0
+    for i in range(len(path) - 1):
+        total_distance += graph[path[i]][path[i + 1]]
+    total_distance += graph[path[-1]][path[0]]  # Return to the starting point
+    return total_distance
+
+# Brute-force approach to solve TSP
+def travelling_salesman(graph):
+    vertices = list(range(len(graph)))
+    min_path = None
+    min_distance = float('inf')
+
+    # Generate all possible permutations of vertices (except the starting point)
+    for permutation in itertools.permutations(vertices[1:]):
+        current_path = [vertices[0]] + list(permutation)
+        current_distance = calculate_total_distance(graph, current_path)
+
+        if current_distance < min_distance:
+            min_distance = current_distance
+            min_path = current_path
+
+    return min_path, min_distance
+
+# Example usage
+if __name__ == "__main__":
+    # Adjacency matrix representation of the graph
+    graph = [
+        [0, 10, 15, 20],
+        [10, 0, 35, 25],
+        [15, 35, 0, 30],
+        [20, 25, 30, 0]
+    ]
+
+    optimal_path, optimal_distance = travelling_salesman(graph)
+    print("Optimal path:", optimal_path)
+    print("Optimal distance:", optimal_distance)
+ 
