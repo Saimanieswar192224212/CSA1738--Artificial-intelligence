@@ -1,0 +1,15 @@
+% Define the database
+person(john_doe, date(1980, 6, 15)).
+person(jane_smith, date(1992, 12, 5)).
+person(alice_johnson, date(1985, 3, 23)).
+person(bob_brown, date(1979, 8, 30)).
+person(charlie_clark, date(2000, 11, 11)).
+
+% Queries
+% Find the DOB of a person
+find_dob(Name, Year, Month, Day) :-
+    person(Name, date(Year, Month, Day)).
+
+% Find the names of all people born in a specific year
+find_people_by_year(Year, Name) :-
+    person(Name, date(Year, _, _)).
