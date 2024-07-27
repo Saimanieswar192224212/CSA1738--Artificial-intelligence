@@ -1,0 +1,18 @@
+% Facts
+parent(john, mary).
+parent(mary, susan).
+parent(susan, anna).
+
+% Rules
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+ancestor(X, Y) :- parent(X, Y).
+ancestor(X, Y) :- parent(X, Z), ancestor(Z, Y).
+
+% Forward Chaining Predicate
+forward_chain :- new_fact(Fact), assert(Fact), fail.
+forward_chain.
+
+% New Facts (used for forward chaining)
+new_fact(grandparent(X, Y)) :- parent(X, Z), parent(Z, Y), not(grandparent(X, Y)).
+new_fact(ancestor(X, Y)) :- parent(X, Y), not(ancestor(X, Y)).
+new_fact(ancestor(X, Y)) :- parent(X, Z), ancestor(Z, Y), not(ancestor(X, Y)).
